@@ -1,0 +1,4 @@
+<h1>Claim Status</h1>
+{% for claim in claims %}
+  <p>{{ claim.name }} - ₹{{ claim.amount }} - Status: {{ claim.status }}</p>
+{% endfor %}

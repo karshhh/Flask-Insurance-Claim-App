@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insurance-claim
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: insurance-claim
+  template:
+    metadata:
+      labels:
+        app: insurance-claim
+    spec:
+      containers:
+        - name: insurance-claim
+          image: your-ecr-url/insurance-claim:v1
+          ports:
+            - containerPort: 5000
