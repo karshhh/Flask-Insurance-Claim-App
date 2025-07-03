@@ -6,9 +6,10 @@ pipeline {
     }
     stages {
         stage('Checkout') {
-            steps {
-                git 'https://github.com/karshhh/Flask-Insurance-Claim-App.git'
-            }
+    steps {
+        git branch: 'main', url: 'https://github.com/karshhh/Flask-Insurance-Claim-App.git'
+    }
+    }
         }
         stage('Build Docker Image') {
             steps {
