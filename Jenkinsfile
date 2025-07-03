@@ -1,16 +1,18 @@
 pipeline {
     agent any
+
     environment {
         ECR_REPO = "aws_account_id.dkr.ecr.region.amazonaws.com/insurance-claim"
         IMAGE_TAG = "v1"
     }
+
     stages {
         stage('Checkout') {
-    steps {
-        git branch: 'main', url: 'https://github.com/karshhh/Flask-Insurance-Claim-App.git'
-    }
-    }
+            steps {
+                git branch: 'main', url: 'https://github.com/karshhh/Flask-Insurance-Claim-App.git'
+            }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -18,6 +20,7 @@ pipeline {
                 }
             }
         }
+
         stage('Push to ECR') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
@@ -29,6 +32,7 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy to EKS') {
             steps {
                 sh 'kubectl apply -f k8s/'
