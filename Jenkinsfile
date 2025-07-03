@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-        ECR_REPO = "aws_account_id.dkr.ecr.region.amazonaws.com/insurance-claim"
+        AWS_REGION = "ap-south-1"
+        AWS_ACCOUNT_ID = "313530061071"
+        ECR_REPO = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/insurance-claim"
         IMAGE_TAG = "v1"
     }
 
@@ -16,7 +18,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("insurance-claim:${IMAGE_TAG}")
+                    docker.build("${ECR_REPO}:${IMAGE_TAG}")
                 }
             }
         }
@@ -24,11 +26,10 @@ pipeline {
         stage('Push to ECR') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
-                    sh '''
-                    aws ecr get-login-password --region region | docker login --username AWS --password-stdin $ECR_REPO
-                    docker tag insurance-claim:${IMAGE_TAG} $ECR_REPO:${IMAGE_TAG}
-                    docker push $ECR_REPO:${IMAGE_TAG}
-                    '''
+                    sh """
+                    aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
+                    docker push ${ECR_REPO}:${IMAGE_TAG}
+                    """
                 }
             }
         }
