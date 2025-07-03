@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/karshhh/insurance-claim-devops-project.git'
+                git 'https://github.com/karshhh/Flask-Insurance-Claim-App.git'
             }
         }
         stage('Build Docker Image') {
